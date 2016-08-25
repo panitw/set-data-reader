@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "restler": "^3.4.0"
+  },
+  "name": "set-data-reader",
+  "version": "1.0.0",
+  "description": "Data reader from set.or.th website",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panitw/set-data-reader.git"
+  },
+  "keywords": [
+    "stock",
+    "echange",
+    "thailand",
+    "data",
+    "reader"
+  ],
+  "author": "Panit Wechasil",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/panitw/set-data-reader/issues"
+  },
+  "homepage": "https://github.com/panitw/set-data-reader#readme"
+}
