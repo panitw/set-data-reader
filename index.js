@@ -27,12 +27,17 @@ module.exports = {
 			var finalUrl = url + sector;
 			restler.get(finalUrl)
 				   .on('success', function(data) {
-						var parsed = parser(data);
-						if (parsed.length > 0) {
-							resolve(parsed);
-						} else {
-							reject(new Error('Unable to read any data from sector page '+sector));
-						}
+				   		try {
+							var parsed = parser(data);
+							if (parsed.length > 0) {
+								resolve(parsed);
+							} else {
+								reject(new Error('Unable to read any data from sector page '+sector));
+							}				   			
+				   		}
+				   		catch (ex) {
+				   			reject(ex);
+				   		}
 				   })
 				   .on('complete', function (response) {
 				   		if (typeof response === 'Error') {

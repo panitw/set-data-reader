@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "cheerio": "^0.22.0",
+    "moment": "^2.14.1",
     "restler": "^3.4.0"
   },
   "name": "set-data-reader",

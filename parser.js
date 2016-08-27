@@ -1,4 +1,5 @@
 var cheerio = require('cheerio');
+var moment = require('moment');
 
 function parseNumber(str) {
 	return parseFloat(str.replace(/,/g, ''));
@@ -6,7 +7,26 @@ function parseNumber(str) {
 
 module.exports = function (pageData) {
 	var output = [];
+	var date = null;
 	var $ = cheerio.load(pageData);
+
+	//Get Last Updated
+	var captions = $('caption');
+	for (var i=0; i<captions.length; i++) {
+		var captionText = $(captions[i]).text().trim();
+		var markerIndex = captionText.indexOf('Last Update');
+		if (markerIndex > -1) {
+			var dateText = captionText.substring(markerIndex + 11).trim();
+			date = moment(dateText, 'DD MMM YYYY hh:mm:ss').startOf('day').toDate();
+			break;
+		}
+	}
+
+	if (date === null) {
+		throw new Error('No date found in the page');
+	}
+
+	//Get Data
 	var rows = $('table.table-info tr');
 	var symbol, open, high, low, close, volume;
 	for (var i=0; i<rows.length; i++) {
@@ -21,6 +41,7 @@ module.exports = function (pageData) {
 			if (!isNaN(open) && !isNaN(high) && !isNaN(low) && !isNaN(close) && !isNaN(volume)) {
 				output.push({
 					symbol: symbol,
+					date: date,
 					open: open,
 					high: high,
 					low: low,
