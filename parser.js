@@ -17,7 +17,7 @@ module.exports = function (pageData) {
 		var markerIndex = captionText.indexOf('Last Update');
 		if (markerIndex > -1) {
 			var dateText = captionText.substring(markerIndex + 11).trim();
-			date = moment(dateText, 'DD MMM YYYY hh:mm:ss').startOf('day').toDate();
+			date = moment(dateText, 'DD MMM YYYY hh:mm:ss').toDate();
 			break;
 		}
 	}
