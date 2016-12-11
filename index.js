@@ -32,7 +32,7 @@ module.exports = {
 				   });
 		});
 	},
-	readSETIndex: function () {
+	readIndices: function () {
 		return new Promise(function (resolve, reject) {
 
 			restler.get(indexUrl)
