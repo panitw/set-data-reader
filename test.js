@@ -1,4 +1,4 @@
 var reader = require('./index');
-reader.read().then(function (results) {
-	console.log(results[0]);
+reader.readSETIndex().then(function (results) {
+	console.log(results);
 });
