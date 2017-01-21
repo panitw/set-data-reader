@@ -2,7 +2,7 @@ var cheerio = require('cheerio');
 var moment = require('moment');
 
 function parseNumber(str) {
-	return parseFloat(str.replace(/,/g, ''));
+	return parseFloat(str.replace('+','').replace(/,/g, ''));
 }
 
 module.exports = function (pageData) {
@@ -49,6 +49,26 @@ module.exports = function (pageData) {
 					volume: volume
 				});
 			}
+		} else
+		if (cells.length === 8) {
+			symbol = $(cells[0]).text().trim();
+			close = parseNumber($(cells[1]).text());
+			change = parseNumber($(cells[2]).text());
+			high = parseNumber($(cells[4]).text());
+			low = parseNumber($(cells[5]).text());
+			open = close - change;
+			volume = parseNumber($(cells[6]).text()) * 1000;
+			if (!isNaN(open) && !isNaN(high) && !isNaN(low) && !isNaN(close) && !isNaN(volume)) {
+				output.push({
+					symbol: symbol,
+					date: date,
+					open: open,
+					high: high,
+					low: low,
+					close: close,
+					volume: volume
+				});
+			}			
 		}
 	}
 	return output;
