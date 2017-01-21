@@ -1,11 +1,12 @@
 var cheerio = require('cheerio');
 var moment = require('moment');
+var Papa = require('papaparse');
 
 function parseNumber(str) {
 	return parseFloat(str.replace('+','').replace(/,/g, ''));
 }
 
-module.exports = function (pageData) {
+function parsePriceData (pageData) {
 	var output = [];
 	var date = null;
 	var $ = cheerio.load(pageData);
@@ -73,3 +74,46 @@ module.exports = function (pageData) {
 	}
 	return output;
 };
+
+function parseIndexData(indexData) {
+
+	var results = Papa.parse(indexData, {
+		header: true
+	});
+
+	var fields = results.meta.fields;
+	var data = results.data;
+
+	//Convert date and find the newest data
+	var newestData = null;	
+	for (var i=0; i<data.length; i++) {
+		var item = data[i];
+		item.Date = moment(item.Date, 'DD/MM/YYYY').toDate();
+
+		if (!newestData) {
+			newestData = item;
+		} else {
+			if (item.Date > newestData.Date) {
+				newestData = item;
+			}
+		}
+	}
+
+	var output = [];
+	if (newestData) {
+		for (var i=1; i<fields.length; i++) {
+			output.push({
+				date: newestData.Date,
+				symbol: fields[i].trim(),
+				close: parseFloat(newestData[fields[i]])
+			});
+		}
+	}
+
+	return output;
+}
+
+module.exports = {
+	parsePriceData: parsePriceData,
+	parseIndexData: parseIndexData
+}
